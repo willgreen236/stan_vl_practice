@@ -14,24 +14,32 @@ data {
 
 parameters{
   real<lower=0> a[K];
-  real<lower=0> b;
-  real<lower=0> tmax;
+  real<lower=0> b[K];
+  real<lower=0> tmax[K];
   real<lower=0> sigma;
   real<lower=0> a_bar;
   real<lower=0> a_sigma;
+  real<lower=0> b_bar;
+  real<lower=0> b_sigma;
+  real<lower=0> t_bar;
+  real<lower=0> t_sigma;
 }
 
 model{
   for(i in 1:N){
-    vl[i] ~ normal(vlfunc(a[individual[i]], b, t[i], tmax), sigma);
+    vl[i] ~ normal(vlfunc(a[individual[i]], b[individual[i]], t[i], tmax[individual[i]]), sigma);
   }
   // priors
   a ~ normal(a_bar,a_sigma);
-  b ~ uniform(0,1);
-  tmax ~ uniform(20,40);
+  b ~ normal(b_bar,b_sigma);
+  tmax ~ normal(t_bar,t_sigma);
   sigma ~ uniform(0,1);
   
   // hyper-priors
   a_bar ~ normal(1,1);
   a_sigma ~ normal(1,1);
+  b_bar ~ normal(1,1);
+  b_sigma ~ normal(1,1);
+  t_bar ~ normal(30,10);
+  t_sigma ~ normal(10,3);
 }
