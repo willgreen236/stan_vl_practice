@@ -18,18 +18,20 @@ for (i in 1:length(individual)) individual[i] = floor((i-1)/(N/K) + 1)
 vl <- vector(length = N)
 for (i in 1:N){
   index <- floor((i-1)/(N/K))+1
-  vl[i] = max(rnorm(n=1,log10(10^vlmax[index]*(a[index]+b[index])/(b[index]*exp(-a[index]*(t[i]-tmax[index])) + a[index] * exp(b[index]*(t[i]-tmax[index])))), 0.01),4)
+  vl[i] = max(rnorm(n=1,log10(10^vlmax[index]*(a[index]+b[index])/(b[index]*exp(-a[index]*(t[i]-tmax[index])) + a[index] * exp(b[index]*(t[i]-tmax[index])))), 0.01),0)
 } 
 
 plot(vl[1:100])  
 
-model_multiple_vl <- stan_model("multiple_vl_strains_5.stan")
+model_multiple_vl <- stan_model("multiple_vl_strains_6.stan")
 
 initfun <- function(...) {
   list(a_bar=0.3, a_sigma = 0.1, a=rep(0.3,K), b_bar=0.05, b_sigma = 0.01, b=rep(0.05, K), tmax = rep(21,K), t_bar = 25, log_vlmax_bar = 7, log_vlmax_sigma = 1, log_vlmax = rep(8,K), t_sigma = 4, sigma=0.0001)
 }
 
 fit <- sampling(model_multiple_vl, list(N=N, K=K, t=t, vl = vl, individual = individual), init=initfun, iter=1000, chains=1, seed=1)
+
+print(fit)
 
 post_fit <- function(stan_fit, param) return(as.numeric(get_posterior_mean(stan_fit,par=param)))
 
