@@ -20,7 +20,7 @@ for (i in 1:K){
 
 plot(Z[,1])  
 
-model_multiple_vl <- stan_model("multiple_vl_strains_7_mat.stan")
+model_multiple_vl <- stan_model("hierarchical_with_fn.stan")
 
 initfun <- function(...) {
   list(a_bar=0.3, a_sigma = 0.1, a=rep(0.3,K), b_bar=0.01, b_sigma = 0.01, b=rep(0.01, K), tmax = rep(21,K), t_bar = 20, log_vlmax_bar = 4, log_vlmax_sigma = 1, log_vlmax = rep(4,K), t_sigma = 4, sigma=0.0001)
