@@ -4,9 +4,13 @@ functions {
   } 
   real example_lpdf(real aX, real a1, real b1, real t1, real tmax1, real log_vlmax1, real aSigma, real l_fn1){
     real output;
+    if(aX > 4)  output = log(1-l_fn1) + normal_lpdf(aX | vlfunc(a1, b1, t1, tmax1, log_vlmax1), aSigma);
+    if(aX == 4) output = log(  l_fn1 +  (1-l_fn1) * exp(normal_lcdf(aX | vlfunc(a1, b1, t1, tmax1, log_vlmax1), aSigma)));
     
-    if(aX > 0)  output = log(1-l_fn1) + normal_lpdf(aX | vlfunc(a1, b1, t1, tmax1, log_vlmax1), aSigma);
-    if(aX == 0) output = log(l_fn1); //+ normal_lpdf(0 | vlfunc(a1, b1, t1, tmax1, log_vlmax1), aSigma);
+    //print(output);
+    //if(aX > 4)  output = log(1-l_fn1) + normal_lpdf(aX | vlfunc(a1, b1, t1, tmax1, log_vlmax1), aSigma);
+    //if(aX == 4) output = log(  l_fn1 +  (1-l_fn1) * exp(normal_lcdf(aX | vlfunc(a1, b1, t1, tmax1, log_vlmax1), aSigma)/normal_lcdf(100 | vlfunc(a1, b1, t1, tmax1, log_vlmax1), aSigma)));
+    
     return(output);
   }
 }
